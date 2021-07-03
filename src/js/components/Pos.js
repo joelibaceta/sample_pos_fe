@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import "./App.css";
 import Header from "./Header";
-import io from "socket.io-client";
 import axios from "axios";
 import moment from "moment";
 import { Modal, Button } from "react-bootstrap";
 import LivePos from "./LivePos";
 
 const HOST = "http://localhost:8000";
-let socket = io.connect(HOST);
 
 class Pos extends Component {
   constructor(props) {
@@ -33,11 +31,7 @@ class Pos extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckOut = this.handleCheckOut.bind(this);
   }
-  componentDidUpdate() {
-    if (this.state.items.length !== 0) {
-      socket.emit("update-live-cart", this.state.items);
-    }
-  }
+  
 
   handleSubmit = e => {
     this.setState({ addItemModal: false });
@@ -67,7 +61,6 @@ class Pos extends Component {
       this.setState({ receiptModal: true });
       this.handleSaveToDB();
       this.setState({ items: [] });
-      socket.emit("update-live-cart", []);
     } else {
       this.setState({ changeDue: amountDiff });
       this.setState({ amountDueModal: true });
